@@ -13,7 +13,7 @@ class Game : public graphics::AnimationEventListener, public graphics::MouseEven
   Game(const int &width, const int &height) : gameState(false), score_(0) {
     gameScreen.Initialize(width, height);
   }
-  void CreateOpponents(int);
+  void CreateOpponents();
   void LaunchProjectiles();
   void Init();
   void UpdateScreen();
@@ -28,18 +28,18 @@ class Game : public graphics::AnimationEventListener, public graphics::MouseEven
 
   // Accessors
   graphics::Image &GetGameScreen() { return gameScreen; }
-  std::vector<std::unique_ptr<Opponent>> &GetOpponents() { return olist; }
-  std::vector<std::unique_ptr<OpponentProjectile>> &GetOpponentProjectiles() { return oshots_; }
-  std::vector<std::unique_ptr<PlayerProjectile>> &GetPlayerProjectiles() { return pshots_; }
+  std::vector<std::unique_ptr<Opponent> > &GetOpponents() { return olist; }
+  std::vector<std::unique_ptr<OpponentProjectile> > &GetOpponentProjectiles() { return oshots_; }
+  std::vector<std::unique_ptr<PlayerProjectile> > &GetPlayerProjectiles() { return pshots_; }
   Player &GetPlayer() { return player_; }
 
  private:
   graphics::Image gameScreen;
-  std::vector<std::unique_ptr<Opponent>> olist;
-  std::vector<std::unique_ptr<OpponentProjectile>> oshots_;
-  std::vector<std::unique_ptr<PlayerProjectile>> pshots_;
+  std::vector<std::unique_ptr<Opponent> > olist;
+  std::vector<std::unique_ptr<OpponentProjectile> > oshots_;
+  std::vector<std::unique_ptr<PlayerProjectile> > pshots_;
   Player player_;
-  int score_, oppCount_;
+  int score_;
   bool gameState;
 };
 

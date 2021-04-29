@@ -18,25 +18,25 @@ class OpponentProjectile : public GameElement {
 class Opponent : public GameElement {
  public:
   Opponent() : GameElement(0, 0, 50, 50) {}
-  Opponent(const int &x, const int &y) : GameElement(x, y, 40, 40) {}
+  Opponent(const int &x, const int &y) : GameElement(x, y, 40, 40), count(0) {}
 
   void Draw(graphics::Image &background) override;
   void Move(const graphics::Image &gameScreen) override;
 
   std::unique_ptr<OpponentProjectile> LaunchProjectile() {
-    if (count != 200) {
+    std::cout << count << ' ';
+    if (count < 149) {
       count++;
       return nullptr;
-    } else if (count == 200) {
-      std::unique_ptr<OpponentProjectile> oshot = std::make_unique<OpponentProjectile>(x_+ width_/2, y_ + height_);
-      count = 0;
-    return std::move(oshot);
-    }
+    } else if (count == 149) {
+      count = 150;
+    return std::make_unique<OpponentProjectile>(x_+ width_/2, y_ + height_);;
+  } else if (count == 150) count = 0;
     return nullptr;
   }
   private:
-    int count = 0;
-    std::vector<std::unique_ptr<OpponentProjectile>> oshots_;
+    int count;
 };
+
 
 #endif
