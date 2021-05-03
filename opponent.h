@@ -24,15 +24,14 @@ class Opponent : public GameElement {
   void Move(const graphics::Image &gameScreen) override;
 
   std::unique_ptr<OpponentProjectile> LaunchProjectile() {
-    std::cout << count << ' ';
-    if (count < 149) {
+    if (count < 125) {
       count++;
       return nullptr;
-    } else if (count == 149) {
-      count = 150;
-    return std::make_unique<OpponentProjectile>(x_+ width_/2, y_ + height_);;
-  } else if (count == 150) count = 0;
-    return nullptr;
+    } else {
+      count = 0;
+      std::unique_ptr<OpponentProjectile> oshot = std::make_unique<OpponentProjectile>(x_+ width_/2, y_ + height_);
+      return std::move(oshot);
+    }
   }
   private:
     int count;

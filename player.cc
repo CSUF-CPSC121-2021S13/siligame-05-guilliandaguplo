@@ -20,7 +20,7 @@ void PlayerProjectile::Draw(graphics::Image &background) {
 void Player::Move(const graphics::Image &gameScreen) {}
 void PlayerProjectile::Move(const graphics::Image &gameScreen) {
   if (!IsOutOfBounds(gameScreen)) {
-   y_ -= 3; // Temp
+   y_ -= 20; // Temp
   } else {
     SetIsActive(false);
     // std::cout << "Error: unable to move PlayerProjectile object\n";

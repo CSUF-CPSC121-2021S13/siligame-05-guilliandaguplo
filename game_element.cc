@@ -13,14 +13,8 @@ bool GameElement::IntersectsWith(GameElement* object) {
     return false;
 }
 bool GameElement::IsOutOfBounds(const graphics::Image &gameScreen) {
-  if (x_ > 0 &&
-      y_ > 0 &&
-      GetX() + GetWidth() <= 0 + gameScreen.GetWidth()&&
-      GetY() + GetHeight() <= 0 + gameScreen.GetHeight()) {
-
-      return false;
-    }
-  else return true;
+  return GetX() < 0 || GetY() < 0 || GetX() + GetWidth() > gameScreen.GetWidth() ||
+         GetY() + GetHeight() > gameScreen.GetHeight();
 }
 void GameElement::Helper(graphics::Image &background, std::string &skin, int x_, int y_) {
    graphics::Image drawing;
