@@ -23,7 +23,7 @@ void GameElement::Helper(graphics::Image &background, std::string &skin, int x_,
      int x = i;
      for (int j = 0; j < drawing.GetHeight(); j++) {
        int y = j;
-       if (drawing.GetColor(i,j) != graphics::Color(0, 0, 0)) {
+       if (drawing.GetColor(i,j) != graphics::Color(0, 0, 0) && y_ + drawing.GetHeight() < background.GetHeight()) {
          background.SetColor((i + x_), (j + y_), drawing.GetColor(i,j));
        } else {
          continue;

@@ -97,12 +97,12 @@ void Game::UpdateScreen() {
   gameScreen.DrawText(0,0, score, 32, graphics::Color(0,0,0));
   if (player_.GetIsActive()) player_.Draw(gameScreen);
   for (int i = 0; i < olist.size(); i++) {
-      if (olist[i]->GetIsActive()) {
+      if (olist[i]->GetIsActive() && !(olist[i]->IsOutOfBounds(gameScreen))) {
         olist[i]->Draw(gameScreen);
       }
     }
     for (int i = 0; i < oshots_.size(); i++) {
-      if (oshots_[i]->GetIsActive()) {
+      if (oshots_[i]->GetIsActive() && !(oshots_[i]->IsOutOfBounds(gameScreen))) {
         oshots_[i]->Draw(gameScreen);
       }
     }

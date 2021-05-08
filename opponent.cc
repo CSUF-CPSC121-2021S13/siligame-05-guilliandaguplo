@@ -18,6 +18,7 @@ void Opponent::Decide() {
  void Opponent::Move(const graphics::Image &gameScreen) {
    x_ += 1;
    y_ += 1;
+   if (IsOutOfBounds(gameScreen)) SetIsActive(false);
  }
  void OpponentProjectile::Move(const graphics::Image &gameScreen) {
     y_ += 22; // Temp
