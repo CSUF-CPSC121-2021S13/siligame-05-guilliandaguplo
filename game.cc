@@ -80,13 +80,13 @@ void Game::FilterIntersections() {
       }
     }
   }
- //  for (int i = 0; i < oshots_.size(); i++) {
- //    if (player_.IntersectsWith(oshots_[i].get())) {
- //      oshots_[i]->SetIsActive(false);
- //      GetPlayer().SetIsActive(false);
- //      gameState = true;
- //  }
- // }
+  for (int i = 0; i < oshots_.size(); i++) {
+    if (player_.IntersectsWith(oshots_[i].get())) {
+      oshots_[i]->SetIsActive(false);
+      GetPlayer().SetIsActive(false);
+      gameState = true;
+  }
+ }
 }
 void Game::UpdateScreen() {
   if (!(HasLost())) {
@@ -147,13 +147,9 @@ void Game::OnMouseEvent(const graphics::MouseEvent &event) {
       player_.SetY(old_y);
     }
   }
-  if (event.GetMouseAction() == graphics::MouseAction::kPressed) {
+  if (event.GetMouseAction() == graphics::MouseAction::kPressed || event.GetMouseAction() == graphics::MouseAction::kDragged) {
       /* code */
     std::unique_ptr<PlayerProjectile> pshot = std::make_unique<PlayerProjectile>(GetPlayer().GetX()+(GetPlayer().GetWidth()/2), GetPlayer().GetY());
     GetPlayerProjectiles().push_back(std::move(pshot));
   }
 }
-
-// void Game::CreatePlayerProjectiles() {
-  //   std::unique_ptr<PlayerProjectile> pshot = std::make_unique<PlayerProjectile>(player_.GetX(), player_.GetY())
-  //   pshots_.push_back(pshot);
