@@ -20,21 +20,23 @@ class Opponent : public GameElement {
   Opponent() : GameElement(0, 0, 50, 50) {}
   Opponent(const int &x, const int &y) : GameElement(x, y, 40, 40), count(0) {}
 
+  void Decide();
   void Draw(graphics::Image &background) override;
   void Move(const graphics::Image &gameScreen) override;
 
   std::unique_ptr<OpponentProjectile> LaunchProjectile() {
-    if (count < 125) {
+    if (count == 35) {
+      std::unique_ptr<OpponentProjectile> oshot = std::make_unique<OpponentProjectile>(GetX() + (GetWidth()/2), GetY() + GetHeight());
+      count = 0;
+      return std::move(oshot);
+    } else {
       count++;
       return nullptr;
-    } else {
-      count = 0;
-      std::unique_ptr<OpponentProjectile> oshot = std::make_unique<OpponentProjectile>(x_+ width_/2, y_ + height_);
-      return std::move(oshot);
     }
   }
   private:
     int count;
+    std::vector<std::unique_ptr<graphics::Image> > skins;
 };
 
 

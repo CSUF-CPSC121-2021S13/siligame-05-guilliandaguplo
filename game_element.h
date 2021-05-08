@@ -25,11 +25,13 @@ class GameElement {
 
   bool IntersectsWith(GameElement* object);
   bool IsOutOfBounds(const graphics::Image &gameScreen);
+
   virtual void Draw(graphics::Image &background) = 0;
   virtual void Move(const graphics::Image &gameScreen) = 0;
  protected:
   int width_, height_, x_, y_;
   bool is_active;
+  std::string skin = "null";
 };
 
 #endif

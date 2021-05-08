@@ -25,6 +25,14 @@ class Game : public graphics::AnimationEventListener, public graphics::MouseEven
   bool HasLost() const { return gameState; }
   int GetScore() const { return score_; }
   void RemoveInactive();
+  void LoadMap() {
+    map.Load("map.bmp");
+    for (size_t i = 0; i < gameScreen.GetWidth(); i++) {
+      for (size_t j = 0; j < gameScreen.GetHeight(); j++) {
+        gameScreen.SetColor(i,j,map.GetColor(i,j));
+      }
+    }
+  }
 
   // Accessors
   graphics::Image &GetGameScreen() { return gameScreen; }
@@ -34,12 +42,12 @@ class Game : public graphics::AnimationEventListener, public graphics::MouseEven
   Player &GetPlayer() { return player_; }
 
  private:
-  graphics::Image gameScreen;
+  graphics::Image gameScreen, map;
   std::vector<std::unique_ptr<Opponent> > olist;
   std::vector<std::unique_ptr<OpponentProjectile> > oshots_;
   std::vector<std::unique_ptr<PlayerProjectile> > pshots_;
   Player player_;
-  int score_, x = 0;
+  int score_;
   bool gameState;
 };
 

@@ -9,6 +9,7 @@ class Player : public GameElement {
  public:
   Player() : GameElement(0, 0, 50, 50) {}
   Player(const int &x, const int &y) : GameElement(x, y, 40, 40) {}
+  void Decide();
   void Draw(graphics::Image &background) override;
   void Move(const graphics::Image &gameScreen) override;
 };

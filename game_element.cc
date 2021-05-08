@@ -20,9 +20,11 @@ void GameElement::Helper(graphics::Image &background, std::string &skin, int x_,
    graphics::Image drawing;
    drawing.Load(skin);
    for (int i = 0; i < drawing.GetWidth(); i++) {
+     int x = i;
      for (int j = 0; j < drawing.GetHeight(); j++) {
+       int y = j;
        if (drawing.GetColor(i,j) != graphics::Color(0, 0, 0)) {
-         background.SetColor(i + x_, j + y_, drawing.GetColor(i,j));
+         background.SetColor((i + x_), (j + y_), drawing.GetColor(i,j));
        } else {
          continue;
        }

@@ -1,15 +1,36 @@
 #include "player.h"
+void Player::Decide() {
+  if (skin == "null") {
+    skin = "player1.bmp";
+  } //else if (skin == "player1.bmp") {
+  //   skin = "player2.bmp";
+  // } else if (skin == "player2.bmp") {
+  //   skin = "player3.bmp";
+  // } else if (skin == "player3.bmp") {
+  //   skin = "player4.bmp";
+  // } else if (skin == "player4.bmp") {
+  //   skin = "player5.bmp";
+  // } else if (skin == "player5.bmp") {
+  //   skin = "player6.bmp";
+  // } else if (skin == "player6.bmp") {
+  //   skin = "player7.bmp";
+  // } else if (skin == "player7.bmp") {
+  //   skin = "player8.bmp";
+  // } else if (skin == "player8.bmp") {
+  //   skin = "player9.bmp";
+  // } else if (skin == "player9.bmp") {
+  //   skin = "player1.bmp";
+  // }
+  }
 
 void Player::Draw(graphics::Image &background) {
-  std::string skin;
   int x, y;
   x = GetX();
   y = GetY();
-  skin = "player.bmp";
-    Helper(background, skin, x, y);
+  Decide();
+  Helper(background, skin, x, y);
 }
 void PlayerProjectile::Draw(graphics::Image &background) {
-  std::string skin;
   int x, y;
   x = GetX();
   y = GetY();

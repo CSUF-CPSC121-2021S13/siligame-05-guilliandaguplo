@@ -4,13 +4,12 @@
 #include <iostream>
 #include <stdlib.h>
 
-void Game::CreateOpponents() {
+const int kAnimationMs = 80;
 
-    x += 70;
-    int y = rand() % 350 + 1;
-    // std::unique_ptr<Opponent> opp = std::make_unique<Opponent>(x,y);
-    // std::unique_ptr<Opponent> opPush = std::move(opp);
-    olist.push_back(std::make_unique<Opponent>(x,250));
+void Game::CreateOpponents() {
+    int x = rand() % 700 + 1;
+    int y = rand() % 300 + 1;
+    olist.push_back(std::make_unique<Opponent>(x,y));
 
 }
 void Game::Init() {
@@ -20,69 +19,68 @@ void Game::Init() {
   player_.SetY(500);
 }
 void Game::Start() {
-  gameScreen.ShowUntilClosed();
+  gameScreen.ShowUntilClosed("Hate it here", kAnimationMs);
 }
 
 void Game::MoveGameElements() {
-  for (size_t i = 0; i < olist.size(); i++) {
+  for (int i = 0; i < olist.size(); i++) {
     if (olist[i]->GetIsActive())
     olist[i]->Move(GetGameScreen());
   }
-  for (size_t i = 0; i < oshots_.size(); i++) {
-    if (olist[i]->GetIsActive())
+  for (int i = 0; i < oshots_.size(); i++) {
+    if (oshots_[i]->GetIsActive())
     oshots_[i]->Move(GetGameScreen());
   }
-  for (size_t i = 0; i < pshots_.size(); i++) {
-    if (olist[i]->GetIsActive())
+  for (int i = 0; i < pshots_.size(); i++) {
+    if (pshots_[i]->GetIsActive())
     pshots_[i]->Move(GetGameScreen());
   }
 }
 void Game::LaunchProjectiles() {
-   for (size_t i = 0; i < GetOpponents().size(); i++) {
+   for (int i = 0; i < GetOpponents().size(); i++) {
     if (olist[i]->GetIsActive()) {
       std::unique_ptr<OpponentProjectile> oshot = olist[i]->LaunchProjectile();
       if (oshot != nullptr) {
-        std::cout << "works ";
         oshots_.push_back(std::move(oshot));
       } else continue;
     }
   }
 }
 void Game::RemoveInactive() {
-  for (size_t i = olist.size(); i > 0; i--) {
-    if (!(olist[i-1]->GetIsActive())) {
-      olist.erase(olist.begin() + (i-1));
+  for (int i = olist.size() - 1; i >= 0; i--) {
+    if (!(olist[i]->GetIsActive())) {
+      olist.erase(olist.begin() + (i));
     }
   }
-  for (size_t i = oshots_.size(); i > 0; i--) {
+  for (int i = oshots_.size(); i > 0; i--) {
       if (!(oshots_[i-1]->GetIsActive())) {
       oshots_.erase(oshots_.begin() + (i-1));
     } else continue;
     }
-  for (size_t i = pshots_.size(); i > 0; i--) {
+  for (int i = pshots_.size(); i > 0; i--) {
       if (!(pshots_[i-1]->GetIsActive())) {
       pshots_.erase(pshots_.begin() + (i-1));
     } else continue;
   }
 }
 void Game::FilterIntersections() {
-  for (size_t i = 0; i < olist.size(); i++) {
+  for (int i = 0; i < olist.size(); i++) {
     if (GetPlayer().IntersectsWith(olist[i].get())) {
       GetPlayer().SetIsActive(false);
       olist[i]->SetIsActive(false);
       gameState = true;
     }
   }
-  for (size_t i = 0; i < olist.size(); i++) {
-    for (size_t j = 0; j < pshots_.size(); j++) {
+  for (int i = 0; i < olist.size(); i++) {
+    for (int j = 0; j < pshots_.size(); j++) {
       if (olist[i]->IntersectsWith(pshots_[j].get())) {
         pshots_[j]->SetIsActive(false);
         olist[i]->SetIsActive(false);
-        score_ += 1;
+        if (player_.GetIsActive()) score_ += 1;
       }
     }
   }
- //  for (size_t i = 0; i < oshots_.size(); i++) {
+ //  for (int i = 0; i < oshots_.size(); i++) {
  //    if (player_.IntersectsWith(oshots_[i].get())) {
  //      oshots_[i]->SetIsActive(false);
  //      GetPlayer().SetIsActive(false);
@@ -92,7 +90,8 @@ void Game::FilterIntersections() {
 }
 void Game::UpdateScreen() {
   if (!(HasLost())) {
-  GetGameScreen().DrawRectangle(0,0,GetGameScreen().GetWidth(),GetGameScreen().GetHeight(), graphics::Color(255, 255, 255));
+  // LoadMap();
+  gameScreen.DrawRectangle(0,0, gameScreen.GetWidth(), gameScreen.GetHeight(), graphics::Color(255, 255, 255));
   std::string score = "Score: ";
   score + std::to_string(GetScore());
   gameScreen.DrawText(0,0, score, 32, graphics::Color(0,0,0));
@@ -119,8 +118,8 @@ void Game::UpdateScreen() {
 
 void Game::OnAnimationStep() {
   if (olist.size() == 0) {
-    int x = rand() % 11;
-    for (size_t i = 0; i < 10; i++) {
+    int x = rand() % 50;
+    for (int i = 0; i < x; i++) {
       CreateOpponents();
     }
   }
@@ -130,7 +129,7 @@ void Game::OnAnimationStep() {
   RemoveInactive();
   UpdateScreen();
   GetGameScreen().Flush();
-  std::cout << olist.size() << std::endl << oshots_.size() << std::endl << pshots_.size() << std::endl;
+  // std::cout << olist.size() << std::endl << oshots_.size() << std::endl << pshots_.size() << std::endl;
 }
 void Game::OnMouseEvent(const graphics::MouseEvent &event) {
   if (event.GetMouseAction() == graphics::MouseAction::kMoved ||
@@ -149,7 +148,6 @@ void Game::OnMouseEvent(const graphics::MouseEvent &event) {
     }
   }
   if (event.GetMouseAction() == graphics::MouseAction::kPressed) {
-    if (pshots_.size() <= olist.size()) {
       /* code */
     std::unique_ptr<PlayerProjectile> pshot = std::make_unique<PlayerProjectile>(GetPlayer().GetX()+(GetPlayer().GetWidth()/2), GetPlayer().GetY());
     GetPlayerProjectiles().push_back(std::move(pshot));
@@ -159,4 +157,3 @@ void Game::OnMouseEvent(const graphics::MouseEvent &event) {
 // void Game::CreatePlayerProjectiles() {
   //   std::unique_ptr<PlayerProjectile> pshot = std::make_unique<PlayerProjectile>(player_.GetX(), player_.GetY())
   //   pshots_.push_back(pshot);
-  // }
